@@ -19,7 +19,7 @@ const StyledMineGame = styled(PageMineGame)`
   dalign-items: center;
   display: flex;
   justify-content: center;
-  width: 100vw;
+  min-width: 100vw;
 `;
 
 export default StyledMineGame;
