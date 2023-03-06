@@ -1,0 +1,114 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "rules": {
+    "no-undef": 0,
+    "no-import-assign": 0,
+    "no-unused-vars": 0,
+    "@typescript-eslint/no-unused-vars": [
+      1,
+      { "args": "none", "varsIgnorePattern": "^_", "ignoreRestSiblings": true }
+    ],
+    "no-constant-condition": 0,
+    "require-yield": 0,
+    "no-empty": 0,
+    "camelcase": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "handle-callback-err": 0,
+    "jasmine/no-global-setup": 0,
+    "jsx-a11y/anchor-has-content": 0,
+    "jsx-a11y/aria-role": 0,
+    "jsx-a11y/click-events-have-key-events": 0,
+    "jsx-a11y/media-has-caption": 0,
+    "jsx-a11y/mouse-events-have-key-events": 0,
+    "jsx-a11y/no-autofocus": 0,
+    "jsx-a11y/no-noninteractive-element-interactions": 0,
+    "jsx-a11y/no-noninteractive-tabindex": 0,
+    "jsx-a11y/no-static-element-interactions": 0,
+    "no-await-in-loop": 0,
+    "no-duplicate-imports": 0,
+    "no-throw-literal": 0,
+    "prefer-template": 2,
+    "react/no-danger": 2,
+    "react/no-unused-state": 2,
+    "react/prefer-es6-class": 2,
+    "react/prop-types": 0,
+    "react/sort-comp": [
+      2,
+      {
+        "order": [
+          "type-annotations",
+          "static-methods",
+          "lifecycle",
+          "/^on.+$/",
+          "render",
+          "/^render.+$/",
+          "everything-else"
+        ]
+      }
+    ],
+    "react/no-find-dom-node": 0,
+    "react/no-this-in-sfc": 2,
+    "react-hooks/rules-of-hooks": 2,
+    "react-hooks/exhaustive-deps": 1,
+    "sort-keys-fix/sort-keys-fix": [
+      1,
+      "asc",
+      {
+        "caseSensitive": true,
+        "natural": true
+      }
+    ],
+    "sort-vars": [
+      "error",
+      {
+        "ignoreCase": true
+      }
+    ],
+    "spaced-comment": 2
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true,
+    "jest": true
+  },
+  "plugins": [
+    "jsx-a11y",
+    "react",
+    "react-hooks",
+    "@typescript-eslint",
+    "sort-keys-fix"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "globals": {
+    "desktopRequire": false,
+    "FB": false,
+    "google": false,
+    "mobileRequire": false,
+    "Sentry": false
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "parserOptions": {
+        "ecmaFeatures": {
+          "jsx": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module",
+        "project": "tsconfig.json"
+      }
+    }
+  ]
+}

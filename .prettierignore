@@ -1,0 +1,3 @@
+# Add ignored files here
+src/assets
+*.json
