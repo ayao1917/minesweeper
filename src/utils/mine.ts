@@ -28,6 +28,7 @@ export function initialMap(
           isMine: true,
           isReveal: false,
           isFlag: false,
+          isExplode: false,
         };
       }
 
@@ -38,6 +39,7 @@ export function initialMap(
         isMine: false,
         isReveal: false,
         isFlag: false,
+        isExplode: false,
       };
     });
   });

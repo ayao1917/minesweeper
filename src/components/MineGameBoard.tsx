@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -16,7 +17,7 @@ import {
   revealGrid,
 } from "../utils/mine";
 
-import type { MineGridData, MineLevelData } from "../types/mine";
+import type { MineGridData } from "../types/mine";
 
 interface Props {
   className?: string;
@@ -35,6 +36,10 @@ const MineGameBoard = ({ className }: Props) => {
 
   // Initial the grid data when level is updated
   useEffect(() => {
+    setTimer(0);
+    setFlagCount(0);
+    setIsFirstClick(true);
+    setGameStatus(GAME_STATUS.PENDING);
     setGameData(() => {
       return initialMap(maxWidth, maxHeight, mines);
     });
@@ -78,6 +83,7 @@ const MineGameBoard = ({ className }: Props) => {
       } else {
         // Reveal all grid
         setGameStatus(GAME_STATUS.DEAD);
+        gameData[row][column].isExplode = true;
         updateData = revealAll(updateData);
       }
     } else {
@@ -195,8 +201,9 @@ const MineGameBoard = ({ className }: Props) => {
         break;
     }
 
-    const buttonClassName = gameLevel === level ?
-      "levelButton buttonActive" : "levelButton";
+    const buttonClassName = classNames("levelButton", {
+      buttonActive: gameLevel === level,
+    });
 
     return (
       <button

@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import React from "react";
 import styled from "styled-components";
 
@@ -18,9 +19,20 @@ const MineGameGrid = ({
   onDoubleClick,
   onRightClick,
 }: Props) => {
-  const { row, column, adjacent, isFlag, isMine, isReveal } = data;
-  const buttonContentClassName = isReveal ?
-    "buttonContent buttonReveal" : "buttonContent";
+  const { row, column, adjacent, isFlag, isMine, isReveal, isExplode } = data;
+  const buttonContentClassName = classNames("buttonContent", {
+    buttonExplode: isReveal && isExplode,
+    buttonReveal: isReveal && !isExplode,
+    adjacentOne: adjacent === 1,
+    adjacentTwo: adjacent === 2,
+    adjacentThree: adjacent === 3,
+    adjacentFour: adjacent === 4,
+    adjacentFive: adjacent === 5,
+    adjacentSix: adjacent === 6,
+    adjacentSeven: adjacent === 7,
+    adjacentEight: adjacent === 8,
+    wrongFlag: isReveal && isFlag && !isMine,
+  });
 
   const onClickGrid = (e: React.MouseEvent<HTMLElement>) => {
     if (e.detail === 1) {
@@ -77,6 +89,36 @@ const StyledMineGameGrid = styled(MineGameGrid)`
   }
   .buttonReveal {
     background-color: #E5DCC8;
+  }
+  .buttonExplode {
+    background-color: #E67A7A;
+  }
+  .adjacentOne {
+    color: #393EF4;
+  }
+  .adjacentTwo {
+    color: #187D3A;
+  }
+  .adjacentThree {
+    color: #F48639;
+  }
+  .adjacentFour {
+    color: #111DAD;
+  }
+  .adjacentFive {
+    color: #AD1130;
+  }
+  .adjacentSix {
+    color: #11ADA1;
+  }
+  .adjacentSeven {
+    color: #A811AD;
+  }
+  .adjacentEight {
+    color: #B69CB7;
+  }
+  .wrongFlag {
+    color: #E67A7A;
   }
 `;
 
