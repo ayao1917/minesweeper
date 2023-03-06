@@ -9,6 +9,7 @@ import {
 } from "../constants/mine";
 import {
   getHiddenCount,
+  hasMinesAround,
   initialMap,
   revealAdjacentGrid,
   revealAll,
@@ -30,16 +31,18 @@ const MineGameBoard = ({ className }: Props) => {
   const [isFirstClick, setIsFirstClick] = useState(true);
   const isGameOver = [GAME_STATUS.DEAD, GAME_STATUS.SUCCESS].includes(gameStatus);
 
-  const { columns, mines, rows } = LEVEL_DATA[gameLevel];
+  const { maxHeight, maxWidth, mines } = LEVEL_DATA[gameLevel];
 
+  // Initial the grid data when level is updated
   useEffect(() => {
     setGameData(() => {
-      return initialMap(columns, rows, mines);
+      return initialMap(maxWidth, maxHeight, mines);
     });
   }, [gameLevel]);
 
   useEffect(() => {
     let interval: number | undefined;
+    // Start timer when user start clicking on a grid
     if (!isFirstClick) {
       interval = setInterval(() => {
         if (!isGameOver && !isFirstClick) {
@@ -48,6 +51,7 @@ const MineGameBoard = ({ className }: Props) => {
       }, 1000);
     }
 
+    // Stop timer when game is over
     if (isGameOver) {
       clearInterval(interval);
     }
@@ -70,7 +74,7 @@ const MineGameBoard = ({ className }: Props) => {
       if (isFirstClick) {
         // Prevent the first click on mine grid
         // Reset all mine exclude user click point
-        updateData = initialMap(columns, rows, mines, [row, column]);
+        updateData = initialMap(maxWidth, maxHeight, mines, [row, column]);
       } else {
         // Reveal all grid
         setGameStatus(GAME_STATUS.DEAD);
@@ -80,6 +84,8 @@ const MineGameBoard = ({ className }: Props) => {
       updateData = revealGrid(row, column, updateData);
     }
 
+    // If the remain grid count is equal to to total mines
+    // This means user find all the mines, set game to success
     if (getHiddenCount(updateData) === mines) {
       setGameStatus(GAME_STATUS.SUCCESS);
       updateData = revealAll(updateData);
@@ -91,7 +97,7 @@ const MineGameBoard = ({ className }: Props) => {
       setIsFirstClick(false);
     }
 
-    setGameData(updateData);
+    setGameData([...updateData]);
   };
 
   const onMarkFlag = (row: number, column: number) => {
@@ -112,10 +118,20 @@ const MineGameBoard = ({ className }: Props) => {
     });
   };
 
+  // Reveal 8 grid around target when double click
   const onSweepArea = (row: number, column: number) => {
-    setGameData(prev => {
-      return [...revealAdjacentGrid(row, column, prev)]
-    });
+    let updateData = gameData;
+    if (hasMinesAround(row, column, gameData)) {
+      // If there're still some mines around and not marked as flag
+      // Set to game over
+      setGameStatus(GAME_STATUS.DEAD);
+      updateData = revealAll(updateData);
+    } else {
+      // Else, reveal them
+      updateData = revealAdjacentGrid(row, column, updateData);
+    }
+
+    setGameData([...updateData]);
   };
 
   const onClickReset = () => {
@@ -123,7 +139,7 @@ const MineGameBoard = ({ className }: Props) => {
     setIsFirstClick(true);
     setTimer(0);
     setGameData(() => {
-      return initialMap(columns, rows, mines);
+      return initialMap(maxWidth, maxHeight, mines);
     });
   };
 

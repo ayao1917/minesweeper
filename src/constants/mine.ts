@@ -17,18 +17,18 @@ export const GAME_LEVEL = {
 
 export const LEVEL_DATA = {
   [GAME_LEVEL.EASY]: {
-    columns: 9,
+    maxHeight: 9,
+    maxWidth: 9,
     mines: 10,
-    rows: 9,
   },
   [GAME_LEVEL.MEDIUM]: {
-    columns: 16,
+    maxHeight: 16,
+    maxWidth: 16,
     mines: 40,
-    rows: 16,
   },
   [GAME_LEVEL.HARD]: {
-    columns: 16,
+    maxHeight: 16,
+    maxWidth: 30,
     mines: 99,
-    rows: 30,
   },
 };
