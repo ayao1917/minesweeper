@@ -73,7 +73,6 @@ const MineGameGrid = ({
         {renderGridContent()}
       </button>
     </div>
-
   );
 };
 

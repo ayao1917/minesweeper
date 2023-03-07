@@ -20,33 +20,27 @@ export function initialMap(
 
   let output = Array.from(Array(maxHeight).keys()).map(row => {
     return Array.from(Array(maxWidth).keys()).map(column => {
-      if (mineSet.has(`${row}-${column}`)) {
-        return {
-          row,
-          column,
-          adjacent: -1,
-          isMine: true,
-          isReveal: false,
-          isFlag: false,
-          isExplode: false,
-        };
-      }
-
-      return {
+      const gridData = {
         row,
         column,
-        adjacent: getAdjacentMineCount(row, column, mineSet),
-        isMine: false,
+        adjacent: -1,
+        isMine: true,
         isReveal: false,
         isFlag: false,
         isExplode: false,
       };
+
+      if (mineSet.has(`${row}-${column}`)) {
+        return gridData;
+      }
+
+      return {
+        ...gridData,
+        adjacent: getAdjacentMineCount(row, column, mineSet),
+        isMine: false,
+      };
     });
   });
-
-  if (exclude) {
-    output = revealGrid(exclude[0], exclude[1], output);
-  }
 
   return output;
 }
@@ -198,6 +192,7 @@ function generateRandomMines(
     const randomColumn = Math.floor((Math.random() * 1000) + 1) % maxWidth;
 
     const key = `${randomRow}-${randomColumn}`;
+    // Bypass duplicate position
     if (!numbers.has(key) && key !== excludeKey) {
       numbers.add(key);
     }

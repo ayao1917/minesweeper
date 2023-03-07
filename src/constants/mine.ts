@@ -1,7 +1,3 @@
-export const DEFAULT_MAX_WIDTH = 10;
-export const DEFAULT_MAX_HEIGHT = 10;
-export const DEFAULT_MINE_COUNT = 10;
-
 export const GAME_STATUS = {
   PENDING: 0,
   PROGRESS: 1,

@@ -29,7 +29,7 @@ const MineGameBoard = ({ className }: Props) => {
   const [flagCount, setFlagCount] = useState(0);
   const [timer, setTimer] = useState(0);
   const [gameStatus, setGameStatus] = useState(GAME_STATUS.PENDING);
-  const [isFirstClick, setIsFirstClick] = useState(true);
+  const isFirstClick = gameStatus === GAME_STATUS.PENDING;
   const isGameOver = [GAME_STATUS.DEAD, GAME_STATUS.SUCCESS].includes(gameStatus);
 
   const { maxHeight, maxWidth, mines } = LEVEL_DATA[gameLevel];
@@ -38,7 +38,6 @@ const MineGameBoard = ({ className }: Props) => {
   useEffect(() => {
     setTimer(0);
     setFlagCount(0);
-    setIsFirstClick(true);
     setGameStatus(GAME_STATUS.PENDING);
     setGameData(() => {
       return initialMap(maxWidth, maxHeight, mines);
@@ -80,6 +79,7 @@ const MineGameBoard = ({ className }: Props) => {
         // Prevent the first click on mine grid
         // Reset all mine exclude user click point
         updateData = initialMap(maxWidth, maxHeight, mines, [row, column]);
+        updateData = revealGrid(row, column, updateData);
       } else {
         // Reveal all grid
         setGameStatus(GAME_STATUS.DEAD);
@@ -100,7 +100,6 @@ const MineGameBoard = ({ className }: Props) => {
 
     if (isFirstClick) {
       setGameStatus(GAME_STATUS.PROGRESS);
-      setIsFirstClick(false);
     }
 
     setGameData([...updateData]);
@@ -142,7 +141,6 @@ const MineGameBoard = ({ className }: Props) => {
 
   const onClickReset = () => {
     setGameStatus(GAME_STATUS.PENDING);
-    setIsFirstClick(true);
     setTimer(0);
     setGameData(() => {
       return initialMap(maxWidth, maxHeight, mines);
