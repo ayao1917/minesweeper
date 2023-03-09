@@ -77,7 +77,7 @@ export function revealGrid(
     return gameData;
   } else {
     // Reveal other 8 grid around if the adjacent mine is 0
-    const checkList = getCheckList(row, column);
+    const checkList = getAdjacentGridPosition(row, column);
 
     return checkList.reduce((acc, curr) => {
       return revealGrid(curr[0], curr[1], acc);
@@ -97,28 +97,30 @@ export function revealAdjacentGrid(
   column: number,
   gameData: MineGridData[][],
 ): MineGridData[][] {
-  const gridData = gameData[row][column];
-  const { adjacent, isFlag, isReveal } = gridData;
+  const checkList = getAdjacentGridPosition(row, column);
+  return [...checkList.reduce((acc, curr) => {
+    return revealGrid(curr[0], curr[1], acc);
+  }, gameData)];
+};
 
-  // Return origin data if the grid is already revealed or it is mark as flag
-  if (isFlag || !isReveal) {
-    return gameData;
-  }
-
-  const checkList = getCheckList(row, column);
-  const totalFlag = checkList.reduce((acc, curr) => {
+/**
+ * Return how many flags exist around the target grid
+ * @param {number} row: Row of the grid
+ * @param {number} column: Column of the grid
+ * @param {MineGridData[][]} gameData: The 2D array of the grid data, check type `MineGridData` 
+ * @returns {number} Flag count
+ */
+export function getAdjacentFlag(
+  row: number,
+  column: number,
+  gameData: MineGridData[][],
+): number {
+  const checkList = getAdjacentGridPosition(row, column);
+  return checkList.reduce((acc, curr) => {
     const { isFlag } = gameData[curr[0]][curr[1]];
     return acc + (isFlag ? 1 : 0);
   }, 0);
-
-  if (adjacent === totalFlag) {
-    return [...checkList.reduce((acc, curr) => {
-      return revealGrid(curr[0], curr[1], acc);
-    }, gameData)];
-  }
-
-  return gameData;
-};
+}
 
 /**
  * Set all the grid data's isReveal to True
@@ -152,7 +154,7 @@ export function getHiddenCount(
 }
 
 /**
- * Check if there is any mines around the grid
+ * Check if there is any mines (not flagged) around the grid
  * @param {number} row: Row of the grid
  * @param {number} column: Column of the grid
  * @param {MineGridData[][]} gameData: The 2D array of the grid data, check type `MineGridData`
@@ -163,8 +165,11 @@ export function hasMinesAround(
   column: number,
   gameData: MineGridData[][],
 ): boolean {
-  const checkList = getCheckList(row, column);
-  return checkList.some(item =>  gameData[item[0]][item[1]].isMine);
+  const checkList = getAdjacentGridPosition(row, column);
+  return checkList.some(item => {
+    const { isFlag, isMine } = gameData[item[0]][item[1]];
+    return !isFlag && isMine;
+  });
 }
 
 // Private functions
@@ -207,20 +212,13 @@ function generateRandomMines(
  * @param {number} column: Column of the grid
  * @param {Set<string>} mineSet: A set contains the grid which has mine, form like `row-column`
  * @returns {number} : Count of the total mine in adjacent grid
- * 
- * Calculate the total amount of mines from adjacent grids
- * map[r - 1][c - 1] | map[r - 1][c] | map[r - 1][c + 1]
- * -------------------------------------------------------
- *   map[r][c - 1]   |    map[r][c]  |    map[r][c + 1]
- * -------------------------------------------------------
- * map[r + 1][c - 1] | map[r + 1][c] | map[r + 1][c + 1]
  */
 function getAdjacentMineCount(
   row: number,
   column: number,
   mineSet: Set<string>,
 ): number {
-  const checkList = getCheckList(row, column);
+  const checkList = getAdjacentGridPosition(row, column);
 
   return checkList.reduce((acc, curr) => {
     return mineSet.has(`${curr[0]}-${curr[1]}`) ? acc + 1 : acc;
@@ -232,8 +230,15 @@ function getAdjacentMineCount(
  * @param {number} row: Row of the grid
  * @param {number} column: Column of the grid
  * @returns {number[][]} List of the 8 grid around the target
+ * 
+ * Calculate the total amount of mines from adjacent grids
+ * map[r - 1][c - 1] | map[r - 1][c] | map[r - 1][c + 1]
+ * -------------------------------------------------------
+ *   map[r][c - 1]   |    map[r][c]  |    map[r][c + 1]
+ * -------------------------------------------------------
+ * map[r + 1][c - 1] | map[r + 1][c] | map[r + 1][c + 1]
  */
-function getCheckList(
+function getAdjacentGridPosition(
   row: number,
   column: number,
 ): number[][] {

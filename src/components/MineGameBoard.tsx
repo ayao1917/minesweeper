@@ -9,6 +9,7 @@ import {
   LEVEL_DATA,
 } from "../constants/mine";
 import {
+  getAdjacentFlag,
   getHiddenCount,
   hasMinesAround,
   initialMap,
@@ -126,6 +127,19 @@ const MineGameBoard = ({ className }: Props) => {
   // Reveal 8 grid around target when double click
   const onSweepArea = (row: number, column: number) => {
     let updateData = gameData;
+    const gridData = gameData[row][column];
+    const { adjacent, isFlag, isReveal } = gridData;
+
+    // Return origin data if the grid is already revealed or it is mark as flag
+    if (isFlag || !isReveal) {
+      return;
+    }
+
+    // Only reveal the grid around when the flag is equal to number
+    if (getAdjacentFlag(row, column, gameData) !== adjacent) {
+      return;
+    }
+
     if (hasMinesAround(row, column, gameData)) {
       // If there're still some mines around and not marked as flag
       // Set to game over
