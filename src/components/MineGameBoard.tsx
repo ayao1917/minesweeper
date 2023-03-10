@@ -258,32 +258,39 @@ const MineGameBoard = ({ className }: Props) => {
 const StyledMineGameBoard = styled(MineGameBoard)`
   background-color: #C2C2C2;
   padding: 24px;
+
   .boardHeader {
     text-align: center;
   }
+
   .boardControlBar {
     align-items: center;
     display: flex;
     margin-bottom: 12px;
+
     .levelButton {
       margin-right: 4px;
     }
+
     .buttonActive {
       background-color: #D3BFBF;
     }
   }
+
   .boardStatusBar {
     align-items: center;
     display: flex;
     justify-content: space-between;
     margin-bottom: 12px;
     width: 100%;
+
     .numberBlock {
       background-color: #951616;
       color: #F92A2A;
       font-weight: 600;
       padding: 2px 4px;
     }
+
     .statusButton {
       background-color: #DAD7D1;
     }
@@ -291,6 +298,7 @@ const StyledMineGameBoard = styled(MineGameBoard)`
   .mineArea {
     display: flex;
     flex-direction: column;
+
     .mineRow {
       display: flex;
     }

@@ -23,6 +23,7 @@ const MineGameGrid = ({
   const buttonContentClassName = classNames("buttonContent", {
     buttonExplode: isReveal && isExplode,
     buttonReveal: isReveal && !isExplode,
+    // Different text color for the numbers
     adjacentOne: adjacent === 1,
     adjacentTwo: adjacent === 2,
     adjacentThree: adjacent === 3,
@@ -78,6 +79,7 @@ const MineGameGrid = ({
 
 const StyledMineGameGrid = styled(MineGameGrid)`
   padding: 1px;
+
   .buttonContent {
     align-items: center;
     background-color: #424547;
@@ -86,36 +88,47 @@ const StyledMineGameGrid = styled(MineGameGrid)`
     justify-content: center;
     width: 40px;
   }
+
   .buttonReveal {
     background-color: #E5DCC8;
   }
+
   .buttonExplode {
     background-color: #E67A7A;
   }
+
   .adjacentOne {
     color: #393EF4;
   }
+
   .adjacentTwo {
     color: #187D3A;
   }
+
   .adjacentThree {
     color: #F48639;
   }
+
   .adjacentFour {
     color: #111DAD;
   }
+
   .adjacentFive {
     color: #AD1130;
   }
+
   .adjacentSix {
     color: #11ADA1;
   }
+
   .adjacentSeven {
     color: #A811AD;
   }
+
   .adjacentEight {
     color: #B69CB7;
   }
+
   .wrongFlag {
     color: #E67A7A;
   }
