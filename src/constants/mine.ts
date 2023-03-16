@@ -1,15 +1,15 @@
-export const GAME_STATUS = {
-  PENDING: 0,
-  PROGRESS: 1,
-  DEAD: 2,
-  SUCCESS: 3,
-};
+export enum GAME_STATUS {
+  PENDING = 0,
+  PROGRESS = 1,
+  DEAD = 2,
+  SUCCESS = 3,
+}
 
 export const GAME_LEVEL = {
   EASY: 0,
   MEDIUM: 1,
   HARD: 2,
-};
+}
 
 export const LEVEL_DATA = {
   [GAME_LEVEL.EASY]: {

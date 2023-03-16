@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import MineGameGrid from "./MineGameGrid";
+import Timer from "./Timer";
 import {
   GAME_LEVEL,
   GAME_STATUS,
@@ -28,7 +29,6 @@ const MineGameBoard = ({ className }: Props) => {
   const [gameLevel, setGameLevel] = useState(GAME_LEVEL.EASY);
   const [gameData, setGameData] = useState<MineGridData[][]>([]);
   const [flagCount, setFlagCount] = useState(0);
-  const [timer, setTimer] = useState(0);
   const [gameStatus, setGameStatus] = useState(GAME_STATUS.PENDING);
   const isFirstClick = gameStatus === GAME_STATUS.PENDING;
   const isGameOver = [GAME_STATUS.DEAD, GAME_STATUS.SUCCESS].includes(gameStatus);
@@ -39,27 +39,6 @@ const MineGameBoard = ({ className }: Props) => {
   useEffect(() => {
     onClickReset();
   }, [gameLevel]);
-
-  useEffect(() => {
-    let interval: number | undefined;
-    // Start timer when user start clicking on a grid
-    if (!isFirstClick) {
-      interval = setInterval(() => {
-        if (!isGameOver && !isFirstClick) {
-          setTimer(prev => prev + 1);
-        }
-      }, 1000);
-    }
-
-    // Stop timer when game is over
-    if (isGameOver) {
-      clearInterval(interval);
-    }
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [isGameOver, isFirstClick]);
 
   const onClickGrid = (row: number, column: number) => {
     const grid = gameData[row][column];
@@ -150,7 +129,6 @@ const MineGameBoard = ({ className }: Props) => {
 
   const onClickReset = () => {
     setGameStatus(GAME_STATUS.PENDING);
-    setTimer(0);
     setFlagCount(0);
     setGameData(() => {
       return initialMap(maxWidth, maxHeight, mines);
@@ -242,9 +220,7 @@ const MineGameBoard = ({ className }: Props) => {
         >
           {renderStatusButtonContent()}
         </button>
-        <div className="numberBlock">
-          {`${timer}`.padStart(3, "0")}
-        </div>
+        <Timer gameStatus={gameStatus} />
       </div>
       {renderMineArea()}
     </div>
