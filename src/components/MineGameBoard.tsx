@@ -9,7 +9,7 @@ import {
   LEVEL_DATA,
 } from "../constants/mine";
 import {
-  getAdjacentFlag,
+  getAdjacentFlagCount,
   getHiddenCount,
   hasMinesAround,
   initialMap,
@@ -37,12 +37,7 @@ const MineGameBoard = ({ className }: Props) => {
 
   // Initial the grid data when level is updated
   useEffect(() => {
-    setTimer(0);
-    setFlagCount(0);
-    setGameStatus(GAME_STATUS.PENDING);
-    setGameData(() => {
-      return initialMap(maxWidth, maxHeight, mines);
-    });
+    onClickReset();
   }, [gameLevel]);
 
   useEffect(() => {
@@ -136,7 +131,7 @@ const MineGameBoard = ({ className }: Props) => {
     }
 
     // Only reveal the grid around when the flag is equal to number
-    if (getAdjacentFlag(row, column, gameData) !== adjacent) {
+    if (getAdjacentFlagCount(row, column, gameData) !== adjacent) {
       return;
     }
 
@@ -156,6 +151,7 @@ const MineGameBoard = ({ className }: Props) => {
   const onClickReset = () => {
     setGameStatus(GAME_STATUS.PENDING);
     setTimer(0);
+    setFlagCount(0);
     setGameData(() => {
       return initialMap(maxWidth, maxHeight, mines);
     });

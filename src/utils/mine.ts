@@ -14,7 +14,7 @@ export function initialMap(
   maxWidth: number,
   maxHeight: number,
   mines: number,
-  exclude?: number[],
+  exclude?: number[], // [r, c]
 ): MineGridData[][] {
   const mineSet = generateRandomMines(maxWidth, maxHeight, mines, exclude);
 
@@ -110,7 +110,7 @@ export function revealAdjacentGrid(
  * @param {MineGridData[][]} gameData: The 2D array of the grid data, check type `MineGridData` 
  * @returns {number} Flag count
  */
-export function getAdjacentFlag(
+export function getAdjacentFlagCount(
   row: number,
   column: number,
   gameData: MineGridData[][],
